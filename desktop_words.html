@@ -609,44 +609,74 @@
 
   /* ── Responsive: Tablet ── */
   @media (max-width: 900px) {
-    body { padding: 16px; }
-    .container { grid-template-columns: 1fr; gap: 12px; height: auto; }
-    .header { flex-wrap: wrap; gap: 10px; }
-    .day-strip { justify-content: flex-start; }
-    .carousel-word .eng { font-size: 48px; }
-    .carousel-word .chn { font-size: 24px; }
+    body { padding: 14px; overflow-x: hidden; }
+    .container { grid-template-columns: 1fr; gap: 12px; height: auto; max-width: 100%; }
+    .header { flex-wrap: wrap; gap: 8px; }
+    .header-right { flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .day-strip { justify-content: flex-start; flex-wrap: wrap; }
+    .carousel-container { padding: 32px 16px; min-height: auto; }
+    .carousel-word .eng { font-size: 42px; }
+    .carousel-word .chn { font-size: 22px; }
+    .progress-bar { padding: 8px 14px; }
+    /* Word cards: switch to compact two-line layout */
+    .word-card { flex-wrap: wrap; gap: 4px 8px; padding: 10px 12px; }
+    .word-english { min-width: auto; }
+    .word-phonetic { min-width: auto; }
+    .word-chinese { min-width: auto; }
+    .word-example { flex-basis: 100%; white-space: normal; overflow: visible; text-overflow: unset; }
   }
 
   /* ── Responsive: Mobile ── */
   @media (max-width: 480px) {
-    body { padding: 10px; }
-    .container { gap: 10px; }
-    .header { padding: 12px 16px; }
-    .header-left h1 { font-size: 16px; }
-    .day-badge { font-size: 12px; padding: 5px 14px; }
-    .panel { padding: 14px 12px; border-radius: var(--radius-md); }
-    .panel-title { font-size: 11px; margin-bottom: 10px; }
-    .word-card { padding: 8px 10px; gap: 8px; font-size: 13px; }
-    .word-card .eng { font-size: 15px; }
-    .word-card .pron { font-size: 11px; }
-    .word-card .chn { font-size: 13px; }
-    .word-card .example { font-size: 11px; }
-    .carousel-word { padding: 24px 18px; }
-    .carousel-word .eng { font-size: 36px; }
-    .carousel-word .pron { font-size: 16px; }
-    .carousel-word .chn { font-size: 20px; }
-    .carousel-word .example { font-size: 13px; }
-    .carousel-controls { gap: 8px; }
-    .carousel-controls button { width: 40px; height: 40px; font-size: 16px; }
-    .mode-toggle button { padding: 6px 12px; font-size: 11px; }
-    .day-dot { width: 24px; height: 24px; font-size: 9px; border-radius: 6px; }
+    body { padding: 8px; overflow-x: hidden; }
+    .container { gap: 8px; max-width: 100%; }
+    .header { padding: 10px 12px; flex-direction: column; align-items: stretch; }
+    .header-left { justify-content: center; }
+    .header-left h1 { font-size: 15px; }
+    .header-left .subtitle { font-size: 11px; }
+    .header-right { flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .header-right .day-badge { font-size: 11px; padding: 4px 12px; }
+    .header-right .status-badge { font-size: 10px; padding: 3px 10px; }
+    .header-right .btn { font-size: 11px; padding: 5px 10px; }
+    .header-right .btn.complete-btn { font-size: 11px; padding: 7px 14px; }
+    .header .btn-group { gap: 4px; }
+    .day-strip { gap: 3px; justify-content: center; flex-wrap: wrap; }
+    .day-dot { width: 22px; height: 22px; font-size: 8px; border-radius: 5px; }
+    .progress-bar { padding: 8px 10px; gap: 8px; }
+    .progress-bar .label { font-size: 10px; }
+    .progress-bar .text { font-size: 10px; }
+    .panel { padding: 12px 10px; border-radius: var(--radius-md); }
+    .panel-title { font-size: 11px; margin-bottom: 8px; padding-bottom: 8px; }
+    /* Word cards: stacked layout, no forced widths */
+    .word-card { flex-wrap: wrap; gap: 2px 6px; padding: 8px 10px; }
+    .word-num { min-width: auto; font-size: 9px; }
+    .word-english { min-width: auto; font-size: 15px; flex-basis: auto; }
+    .word-phonetic { min-width: auto; font-size: 10px; }
+    .word-chinese { min-width: auto; font-size: 13px; }
+    .word-example { flex-basis: 100%; font-size: 10px; white-space: normal !important; overflow: visible !important; text-overflow: unset !important; max-width: 100%; }
+    .word-tag { font-size: 8px; padding: 2px 6px; }
+    /* Carousel */
+    .carousel-container { padding: 24px 10px; min-height: auto; gap: 16px; border-radius: var(--radius-md); }
+    .carousel-word { padding: 16px 8px; }
+    .carousel-word .eng { font-size: 34px; }
+    .carousel-word .phon { font-size: 14px; margin-top: 6px; }
+    .carousel-word .chn { font-size: 18px; margin-top: 6px; }
+    .carousel-word .ex { font-size: 12px; margin-top: 8px; max-width: 100%; }
+    .carousel-word .cat { font-size: 10px; margin-top: 10px; padding: 3px 10px; }
+    .carousel-word .idx { font-size: 11px; margin-top: 8px; }
+    .carousel-container .btn { font-size: 11px; padding: 6px 10px; }
+    .carousel-container > div[style] { flex-wrap: wrap; justify-content: center; gap: 8px !important; }
+    /* Controls */
+    .carousel-controls { gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .mode-toggle button { padding: 5px 10px; font-size: 10px; }
   }
 
   /* ── Touch-friendly ── */
   @media (hover: none) and (pointer: coarse) {
     .word-card { padding: 10px 12px; }
-    .day-dot { min-width: 28px; min-height: 28px; }
+    .day-dot { min-width: 26px; min-height: 26px; }
     .carousel-controls button { min-width: 44px; min-height: 44px; }
+    .btn { min-height: 36px; }
   }
 </style>
 
