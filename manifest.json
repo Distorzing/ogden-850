@@ -2,7 +2,7 @@
   "name": "Ogden 850 每日背词",
   "short_name": "Ogden 850",
   "description": "Ogden Basic English 850 — 30天掌握850个核心英语词汇",
-  "start_url": "desktop_words.html",
+  "start_url": "index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0f1117",

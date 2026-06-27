@@ -1,8 +1,12 @@
 // Ogden 850 PWA — Service Worker (offline cache)
-const CACHE = 'ogden-850-v2';
+const CACHE = 'ogden-850-v3-mobile';
 const ASSETS = [
+  './',
+  'index.html',
   'desktop_words.html',
-  'manifest.json'
+  'manifest.json',
+  'words_data.json',
+  'plan_data.json'
 ];
 
 // Install: cache all assets

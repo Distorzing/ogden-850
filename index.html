@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ogden 850 - 手机背词</title>
+<meta name="theme-color" content="#0f1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ogden 850">
+<link rel="manifest" href="manifest.json?v=20260627-mobile">
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: rgba(24, 26, 36, 0.92);
+    --card-soft: rgba(255,255,255,0.035);
+    --text: #eef1f7;
+    --muted: #8b8fa8;
+    --accent: #6c8cff;
+    --warm: #f0a040;
+    --green: #40c88a;
+    --border: rgba(255,255,255,0.09);
+    --radius: 18px;
+    --shadow: 0 10px 40px rgba(0,0,0,0.35);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --mono: "SF Mono", "Cascadia Code", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; overflow-x: hidden; }
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background:
+      radial-gradient(80% 50% at 10% 10%, rgba(108,140,255,0.16), transparent 60%),
+      radial-gradient(70% 45% at 85% 0%, rgba(240,160,64,0.10), transparent 55%),
+      var(--bg);
+    padding: max(10px, env(safe-area-inset-top)) 10px max(18px, env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app { width: 100%; max-width: 520px; margin: 0 auto; }
+  .hero {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+  }
+  .top { display: flex; align-items: center; gap: 10px; }
+  .logo {
+    width: 42px; height: 42px; border-radius: 13px;
+    display: grid; place-items: center; font-size: 22px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    box-shadow: 0 8px 24px rgba(108,140,255,0.35);
+    flex: 0 0 auto;
+  }
+  h1 { font-size: 17px; margin: 0; letter-spacing: -0.2px; }
+  .sub { margin-top: 2px; font-size: 12px; color: var(--muted); }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+  .badge, button {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+    padding: 8px 11px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .badge.day { background: var(--accent); border-color: transparent; }
+  .badge.done { background: rgba(64,200,138,0.18); color: var(--green); }
+  button { cursor: pointer; font-family: inherit; }
+  button.primary { background: linear-gradient(135deg, var(--green), #2fb476); border: none; }
+  button.active { background: var(--accent); border-color: transparent; }
+
+  .progress { margin-top: 12px; }
+  .bar { height: 7px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--green)); border-radius: 99px; }
+  .progress-text { margin-top: 6px; color: var(--muted); font-size: 11px; text-align: right; }
+
+  .days { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 12px 0 14px; }
+  .day-dot {
+    width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center;
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    background: rgba(255,255,255,0.045); border: 1px solid var(--border);
+  }
+  .day-dot.active { background: var(--accent); color: white; border-color: transparent; }
+  .day-dot.done { color: var(--green); border-color: rgba(64,200,138,0.4); background: rgba(64,200,138,0.12); }
+
+  .mode { display: flex; gap: 8px; justify-content: center; margin: 10px 0 14px; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .panel-title { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 12px; font-weight: 700; margin: 4px 4px 10px; }
+  .count { color: #b8c6ff; background: rgba(108,140,255,0.15); border-radius: 99px; padding: 3px 8px; }
+  .list { display: flex; flex-direction: column; gap: 7px; }
+  .word-card {
+    background: var(--card-soft);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 13px;
+    padding: 10px 11px;
+    overflow-wrap: anywhere;
+  }
+  .row { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; min-width: 0; }
+  .num { font-family: var(--mono); color: var(--muted); font-size: 10px; }
+  .eng { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; }
+  .phon { color: var(--muted); font-size: 11px; font-family: var(--mono); }
+  .chn { color: var(--warm); font-size: 14px; font-weight: 800; }
+  .tag { font-size: 9px; color: #aebeff; background: rgba(108,140,255,0.16); padding: 2px 6px; border-radius: 8px; }
+  .example { margin-top: 5px; color: var(--muted); font-size: 12px; font-style: italic; line-height: 1.35; }
+  .example-zh { margin-top: 3px; color: #a4a8ba; font-size: 12px; line-height: 1.45; }
+
+  .card-view { text-align: center; padding: 28px 14px 20px; min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .big-eng { font-size: clamp(44px, 18vw, 76px); font-weight: 900; letter-spacing: -1px; line-height: 1.05; word-break: break-word; }
+  .big-phon { margin-top: 8px; color: var(--muted); font-family: var(--mono); font-size: 15px; }
+  .big-chn { margin-top: 10px; color: var(--warm); font-size: 28px; font-weight: 900; }
+  .big-ex { margin-top: 16px; color: var(--muted); font-style: italic; font-size: 15px; line-height: 1.45; max-width: 100%; }
+  .big-zh { margin-top: 8px; color: #a4a8ba; font-size: 14px; line-height: 1.5; max-width: 100%; }
+  .card-controls { display: flex; justify-content: center; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+  .idx { color: var(--muted); font-family: var(--mono); font-size: 12px; margin-top: 10px; }
+  .hidden { display: none !important; }
+  .error { padding: 20px; color: #ff9ca8; line-height: 1.6; }
+  .link { color: #b8c6ff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="top">
+      <div class="logo">📘</div>
+      <div>
+        <h1>Ogden Basic English 850</h1>
+        <div class="sub" id="subtitle">正在加载最新词库...</div>
+      </div>
+    </div>
+    <div class="badges">
+      <button class="primary" id="btnComplete">✅ 今日完成</button>
+      <span class="badge day" id="dayBadge">Day --</span>
+      <span class="badge done" id="statusBadge">加载中</span>
+    </div>
+    <div class="progress">
+      <div class="bar"><div class="fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">0/850</div>
+    </div>
+  </section>
+
+  <div class="days" id="dayStrip"></div>
+
+  <div class="mode">
+    <button class="active" id="btnList">📋 列表</button>
+    <button id="btnCard">🎯 卡片</button>
+    <a class="link badge" href="desktop_words.html?v=20260627-mobile">桌面版</a>
+  </div>
+
+  <section class="panel" id="listPanel">
+    <div class="panel-title"><span>🆕 今日新词</span><span class="count" id="newCount">0</span></div>
+    <div class="list" id="wordList"></div>
+  </section>
+
+  <section class="panel hidden" id="cardPanel">
+    <div class="card-view" id="cardView"></div>
+  </section>
+</div>
+
+<script>
+const VERSION = '20260627-mobile';
+const START_DATE = new Date('2026-06-11T00:00:00');
+const COMPLETED_KEY = 'ogden_completed_days';
+let WORDS = [];
+let PLAN = [];
+let activeDay = 1;
+let currentWords = [];
+let cardIndex = 0;
+let mode = 'list';
+
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+
+function getCompletedDays() {
+  try { return new Set(JSON.parse(localStorage.getItem(COMPLETED_KEY) || '[]')); }
+  catch { return new Set(); }
+}
+function saveCompletedDays(days) { localStorage.setItem(COMPLETED_KEY, JSON.stringify([...days])); }
+function calendarDay() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const start = new Date(START_DATE); start.setHours(0,0,0,0);
+  return Math.floor((today - start) / 86400000) + 1;
+}
+function parseRange(range) {
+  const m = String(range || '').match(/(\d+)\s*-\s*(\d+)/);
+  if (!m) return [];
+  const out = [];
+  for (let i = Number(m[1]); i <= Number(m[2]); i++) out.push(i);
+  return out;
+}
+function planFor(day) { return PLAN.find(p => p.day === day); }
+function chooseActiveDay() {
+  const cal = Math.max(1, Math.min(calendarDay(), PLAN.length || 34));
+  const done = getCompletedDays();
+  for (let d = 1; d <= cal; d++) if (!done.has(d)) return d;
+  return cal;
+}
+function wordsForDay(day) {
+  const p = planFor(day);
+  if (!p) return [];
+  return parseRange(p.new_range).map(i => WORDS[i - 1]).filter(Boolean);
+}
+
+function renderHeader() {
+  const done = getCompletedDays();
+  const p = planFor(activeDay);
+  const isDone = done.has(activeDay);
+  $('dayBadge').textContent = `Day ${activeDay}`;
+  $('statusBadge').textContent = isDone ? '✅ 已完成' : '📝 待完成';
+  $('btnComplete').textContent = isDone ? '↩️ 取消完成' : '✅ 今日完成';
+  $('subtitle').textContent = p ? `新学: ${p.new_range}｜复习: ${p.review_range}` : '今日词库';
+  const learned = Math.min(activeDay * 25, WORDS.length);
+  const pct = WORDS.length ? Math.round(learned / WORDS.length * 100) : 0;
+  $('progressFill').style.width = pct + '%';
+  $('progressText').textContent = `${learned}/${WORDS.length} (${pct}%)`;
+}
+
+function renderDayStrip() {
+  const cal = Math.max(1, Math.min(calendarDay(), PLAN.length || 34));
+  const done = getCompletedDays();
+  $('dayStrip').innerHTML = PLAN.map(p => {
+    const cls = done.has(p.day) || p.day < activeDay ? 'done' : (p.day === activeDay ? 'active' : '');
+    return `<button class="day-dot ${cls}" data-day="${p.day}" ${p.day > cal + 5 ? 'aria-label="future"' : ''}>${p.day}</button>`;
+  }).join('');
+  document.querySelectorAll('.day-dot').forEach(btn => btn.addEventListener('click', () => {
+    activeDay = Number(btn.dataset.day);
+    cardIndex = 0;
+    renderAll();
+  }));
+}
+
+function wordCard(w) {
+  return `<article class="word-card">
+    <div class="row">
+      <span class="num">#${esc(w['学习顺序'])}</span>
+      <span class="eng">${esc(w['单词'])}</span>
+      <span class="phon">${esc(w['音标'])}</span>
+      <span class="chn">${esc(w['中文翻译'])}</span>
+      <span class="tag">${esc(w['记忆组'])}</span>
+    </div>
+    <div class="example">${esc(w['使用例句'])}</div>
+    <div class="example-zh">${esc(w['例句理解'])}</div>
+  </article>`;
+}
+function renderList() {
+  $('newCount').textContent = currentWords.length;
+  $('wordList').innerHTML = currentWords.map(wordCard).join('') || '<div class="error">今天没有新词。</div>';
+}
+function renderCard() {
+  const w = currentWords[cardIndex];
+  if (!w) { $('cardView').innerHTML = '<div class="error">今天没有新词。</div>'; return; }
+  $('cardView').innerHTML = `
+    <div class="big-eng">${esc(w['单词'])}</div>
+    <div class="big-phon">${esc(w['音标'])}</div>
+    <div class="big-chn">${esc(w['中文翻译'])}</div>
+    <div class="big-ex">${esc(w['使用例句'])}</div>
+    <div class="big-zh">${esc(w['例句理解'])}</div>
+    <div class="tag" style="margin-top:14px;">${esc(w['记忆组'])}</div>
+    <div class="idx">${cardIndex + 1} / ${currentWords.length}</div>
+    <div class="card-controls">
+      <button id="prevCard">◀ 上一个</button>
+      <button id="nextCard">下一个 ▶</button>
+    </div>`;
+  $('prevCard').onclick = () => { cardIndex = (cardIndex - 1 + currentWords.length) % currentWords.length; renderCard(); };
+  $('nextCard').onclick = () => { cardIndex = (cardIndex + 1) % currentWords.length; renderCard(); };
+}
+function setMode(next) {
+  mode = next;
+  $('btnList').classList.toggle('active', mode === 'list');
+  $('btnCard').classList.toggle('active', mode === 'card');
+  $('listPanel').classList.toggle('hidden', mode !== 'list');
+  $('cardPanel').classList.toggle('hidden', mode !== 'card');
+  if (mode === 'card') renderCard();
+}
+function renderAll() {
+  currentWords = wordsForDay(activeDay);
+  renderHeader();
+  renderDayStrip();
+  renderList();
+  if (mode === 'card') renderCard();
+}
+
+$('btnList').onclick = () => setMode('list');
+$('btnCard').onclick = () => setMode('card');
+$('btnComplete').onclick = () => {
+  const done = getCompletedDays();
+  if (done.has(activeDay)) done.delete(activeDay); else done.add(activeDay);
+  saveCompletedDays(done);
+  renderAll();
+};
+
+async function boot() {
+  try {
+    const [wordsRes, planRes] = await Promise.all([
+      fetch(`words_data.json?v=${VERSION}`, {cache: 'no-store'}),
+      fetch(`plan_data.json?v=${VERSION}`, {cache: 'no-store'})
+    ]);
+    if (!wordsRes.ok || !planRes.ok) throw new Error('词库加载失败');
+    WORDS = await wordsRes.json();
+    PLAN = await planRes.json();
+    activeDay = chooseActiveDay();
+    renderAll();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register(`sw.js?v=${VERSION}`).catch(() => {});
+  } catch (err) {
+    $('wordList').innerHTML = `<div class="error">加载失败：${esc(err.message)}<br><a class="link" href="desktop_words.html?v=${VERSION}">打开桌面版</a></div>`;
+    $('statusBadge').textContent = '加载失败';
+  }
+}
+boot();
+</script>
+</body>
+</html>
