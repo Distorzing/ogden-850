@@ -1,5 +1,5 @@
 // Ogden 850 PWA — Service Worker (offline cache)
-const CACHE = 'ogden-850-v3-mobile';
+const CACHE = 'ogden-850-v4-iphone-daydots';
 const ASSETS = [
   './',
   'index.html',
